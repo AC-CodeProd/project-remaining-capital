@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fr" ng-app="Remaining_Capital">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width">
+        <link href="favicon.ico" type="image/x-icon" rel="icon">
+        <link href="favicon.ico" type="image/x-icon" rel="shortcut icon">
+        <title>Calculez votre capital restant dû</title>
+        <!--[if lt IE 9]>
+        <script src="js/html5shiv-printshiv.min.js"></script>
+        <script src="js/html5shiv.min.js"></script>
+        <![endif]-->
+        <!-- CSS -->
+        <link rel="stylesheet" href="css/vendors.css">
+        <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="css/app.css">
+    </head>
+    <body ng-controller="PageCtrl">
+        <div class="container">
+            <div class="row">
+                <h1 class="text-center">Calcul de mes mensualités</h1>
+                <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Capital restant dû:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control"  ng-model="outstandingCapital" placeholder="Capital restant dû">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Taux annuel:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" ng-model="annualRate" placeholder="Taux annuel">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Nombre d'échéances:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" ng-model="totalPayments" placeholder="Nombre d'échéances">
+                        </div>
+                    </div>
+                </form>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Numéro échéance</th>
+                            <th>Capital restant dû</th>
+                            <th>Mensualité</th>
+                            <th>Gain réel</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="data in datas">
+                            <td data-th="Numéro échéance" >{{data.maturity_number}}</td>
+                            <td data-th="Capital restant dû" >{{data.outstanding_capital|number:2}}</td>
+                            <td data-th="Mensualité" >{{data.monthly|number:2}}</td>
+                            <td data-th="Gain réel" >{{data.real_gain|number:2}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- JavaScript -->
+        <script src="js/vendors.js"></script>
+        <script src="js/app.js"></script>
+    </body>
+</html>
