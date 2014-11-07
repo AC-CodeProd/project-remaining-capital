@@ -7,8 +7,8 @@
 -----------------
 
 ```sh
-git clone https://github.com/AC-CodeProd/project-drawing-kinetic.git
-cd project-drawing-kinetic
+git clone https://github.com/AC-CodeProd/project-remaining-capital.git
+cd project-remaining-capital
 npm install
 bower install
 gulp
