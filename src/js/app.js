@@ -44,11 +44,11 @@ Remaining_Capital.directive('ngPaginate', function() {
             items: '&'
         },
         template:
-        '<nav>'
+        '<nav ng-if="1 < pages().length">'
         + '<ul class="pagination">'
         + '<li ng-class="{ disabled : isFirstPage() }"><a href="" ng-click="goPage(0)"><i class="fa fa-angle-double-left"></i></a></li>'
         + '<li ng-class="{ disabled : isFirstPage() }" ><a href="" title="Précédent" ng-disabled="isFirstPage()" ng-click="previousPage()"><i class="fa fa-angle-left"></i></a></li>'
-        + '<li ng-repeat="page in pages()  track by $index" ng-class="{ active : paginate.currentPage == page, disabled : page == \'...\'}" ><a href="" title="{{page}}" ng-click="goPage(page)">{{page}}</a></li>'
+        + '<li ng-repeat="page in pages()  track by $index" ng-class="{ active : paginate.currentPage == page, disabled : page == \'...\'}" ><a href="" title="{{paginate.page(page)}}" ng-click="goPage(page)">{{paginate.page(page)}}</a></li>'
         + '<li ng-class="{ disabled : isLastPage() }" ><a href="" title="Suivant" ng-disabled="isLastPage()" ng-click="nextPage()"><i class="fa fa-angle-right"></i></a></li>'
         + '<li ng-class="{ disabled : isLastPage() }"><a href="" ng-click="goPage(paginate.lastPage)"><i class="fa fa-angle-double-right"></i></a></li>'
         + '</ul>'
@@ -62,7 +62,13 @@ Remaining_Capital.directive('ngPaginate', function() {
                     scope.paginate = {
                         pageSize: 5,
                         currentPage: 0,
-                        lastPage:0
+                        lastPage:0,
+                        page:function(page){
+                            if(page!='...')
+                                return page+1;
+                            else
+                                return page;
+                        }
                     };
 
                     scope.isFirstPage = function() {
@@ -109,12 +115,13 @@ Remaining_Capital.directive('ngPaginate', function() {
                         } else {
                             position = 'middle';
                         }
+                        console.log(position);
                         var ellipsesNeeded = paginateRange < totalPages;
                         var i = 0;
                         while (i <= totalPages && i <= paginateRange) {
                             var pageNumber = calculatePageNumber(i, scope.paginate.currentPage, paginateRange, totalPages);
 
-                            var openingEllipsesNeeded = (i === 2 && (position === 'middle' || position === 'end'));
+                            var openingEllipsesNeeded = (i === 1 && (position === 'middle' || position === 'end'));
                             var closingEllipsesNeeded = (i === paginateRange - 1 && (position === 'middle' || position === 'start'));
                             if (ellipsesNeeded && (openingEllipsesNeeded || closingEllipsesNeeded)) {
                                 pages.push('...');
