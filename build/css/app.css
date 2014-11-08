@@ -212,3 +212,50 @@ input[type="text"][disabled] + label[placeholder]:before {
   background-repeat: no-repeat;
   background-position: center;
 }
+nav {
+  position: relative;
+}
+nav .pagination li a {
+  background: #232526;
+  color: #FFF;
+  border-color: #16a085;
+}
+nav .pagination li a:hover {
+  color: #232526;
+  background: #16a085;
+  border-color: #16a085;
+}
+nav .pagination li:first-child a,
+nav .pagination li:last-child a {
+  border-radius: 0;
+}
+nav .pagination .active a,
+nav .pagination .active a:hover {
+  color: #232526;
+  background: #16a085;
+  border-color: #16a085;
+}
+nav .pagination .disabled a {
+  background: #232526;
+  color: #bdc3c7;
+  border-color: #16a085;
+}
+nav .pagination .disabled a:hover {
+  color: #232526;
+  background: #16a085;
+  border-color: #16a085;
+}
+nav select {
+  position: absolute;
+  display: block;
+  background: #232526;
+  color: #FFF;
+  right: 0;
+  top: 0;
+  text-align: right;
+  width: 50px;
+  height: 20px;
+  border: 2px solid #16a085;
+  margin-top: 5px;
+  outline-style: none;
+}

@@ -39,20 +39,20 @@ Remaining_Capital.directive('ngPaginate', function() {
     }
     return {
         priority: 0,
-        restrict: 'A',
+        restrict: 'AE',
         scope: {
-            items: '&'
+            items: '&',
+            scrollTop: "@",
+            scrollTarget: "@"
         },
-        template:
-        '<nav ng-if="1 < pages().length">'
+        template: '<nav ng-if="1 < pages().length">'
         + '<ul class="pagination">'
         + '<li ng-class="{ disabled : isFirstPage() }"><a href="" ng-click="goPage(0)"><i class="fa fa-angle-double-left"></i></a></li>'
         + '<li ng-class="{ disabled : isFirstPage() }" ><a href="" title="Précédent" ng-disabled="isFirstPage()" ng-click="previousPage()"><i class="fa fa-angle-left"></i></a></li>'
         + '<li ng-repeat="page in pages()  track by $index" ng-class="{ active : paginate.currentPage == page, disabled : page == \'...\'}" ><a href="" title="{{paginate.page(page)}}" ng-click="goPage(page)">{{paginate.page(page)}}</a></li>'
         + '<li ng-class="{ disabled : isLastPage() }" ><a href="" title="Suivant" ng-disabled="isLastPage()" ng-click="nextPage()"><i class="fa fa-angle-right"></i></a></li>'
         + '<li ng-class="{ disabled : isLastPage() }"><a href="" ng-click="goPage(paginate.lastPage)"><i class="fa fa-angle-double-right"></i></a></li>'
-        + '</ul>'
-        + '<select ng-model="paginate.pageSize" ng-options="size for size in pageSizeList"></select>'
+        + '</ul>' + '<select ng-model="paginate.pageSize" ng-options="size for size in pageSizeList"></select>'
         + '</nav>',
         replace: false,
         compile: function compile(tElement, tAttrs, transclude) {
@@ -62,10 +62,10 @@ Remaining_Capital.directive('ngPaginate', function() {
                     scope.paginate = {
                         pageSize: 5,
                         currentPage: 0,
-                        lastPage:0,
-                        page:function(page){
-                            if(page!='...')
-                                return page+1;
+                        lastPage: 0,
+                        page: function(page) {
+                            if (page != '...')
+                                return page + 1;
                             else
                                 return page;
                         }
@@ -103,10 +103,10 @@ Remaining_Capital.directive('ngPaginate', function() {
                     scope.pages = function() {
                         var pages = [];
                         var paginateRange = 10;
-                        var totalPages = Math.ceil(scope.items().length / scope.paginate.pageSize)-1;
+                        var totalPages = Math.ceil(scope.items().length / scope.paginate.pageSize) - 1;
                         var halfWay = Math.ceil(paginateRange / 2);
                         var position;
-                        scope.paginate.lastPage=totalPages;
+                        scope.paginate.lastPage = totalPages;
 
                         if (scope.paginate.currentPage <= halfWay) {
                             position = 'start';
@@ -115,7 +115,7 @@ Remaining_Capital.directive('ngPaginate', function() {
                         } else {
                             position = 'middle';
                         }
-                        console.log(position);
+
                         var ellipsesNeeded = paginateRange < totalPages;
                         var i = 0;
                         while (i <= totalPages && i <= paginateRange) {
@@ -143,6 +143,9 @@ Remaining_Capital.directive('ngPaginate', function() {
                     };
 
                     scope.$parent.pageItems = function() {
+                        if (scope.scrollTop) {
+                            document.getElementById(scope.scrollTarget).scrollIntoView(true);
+                        }
                         var start = scope.paginate.currentPage * scope.paginate.pageSize;
                         var limit = scope.paginate.pageSize;
                         return scope.items().slice(start, start + limit);

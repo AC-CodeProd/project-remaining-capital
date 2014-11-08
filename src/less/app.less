@@ -131,3 +131,58 @@ input {
         .adaptive_placeholder(@width, @height, 0,1.5em,#FFF,@color-sombre);
     }
 }
+nav{
+    position: relative;
+    .pagination{
+        li{
+            a{
+                background: @color-sombre;
+                color:#FFF;
+                border-color: @seagreen;
+            }
+            a:hover{
+                color:@color-sombre;
+                background: @seagreen;
+                border-color: @seagreen;
+            }
+            &:first-child,&:last-child {
+                a{
+                                border-radius: 0;
+                            }
+            }
+        }
+        .active {
+            a,a:hover {
+                color:@color-sombre;
+                background: @seagreen;
+                border-color: @seagreen;
+            }
+        }
+        .disabled{
+            a{
+                background: @color-sombre;
+                 color:@silver;
+                 border-color: @seagreen;
+            }
+            a:hover{
+                color:@color-sombre;
+                background: @seagreen;
+                border-color: @seagreen;
+            }
+        }
+    }
+    select{
+        position:absolute;
+        display:block;
+        background: @color-sombre;
+        color:#FFF;
+        right:0;
+        top:0;
+        text-align: right;
+        width:50px;
+        height:20px;
+        border:2px solid @seagreen;
+        margin-top: 5px;
+        outline-style: none;
+    }
+}

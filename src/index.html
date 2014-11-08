@@ -45,7 +45,7 @@
 
                 <section class="col-lg-8 col-lg-offset-2">
                     <table class="table table-bordered">
-                        <thead>
+                        <thead id="table-thead">
                             <tr>
                                 <th>Numéro échéance</th>
                                 <th>Capital restant dû</th>
@@ -62,7 +62,7 @@
                             </tr>
                         </tbody>
                     </table>
-                    <div ng-paginate items="datas"></div>
+                    <ng-paginate scroll-top="true"  scroll-target="table-thead" items="datas"></ng-paginate>
                 </section>
             </div>
         </div>
