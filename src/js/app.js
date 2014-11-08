@@ -18,18 +18,41 @@ Remaining_Capital.directive('scrollOnClick', function() {
 });
 Remaining_Capital.directive('ngPaginate', function() {
     var pageSizeLabel = "Page size";
+
+    function calculatePageNumber(i, currentPage, paginateRange, totalPages) {
+        var halfWay = Math.ceil(paginateRange / 2);
+        if (i === paginateRange) {
+            return totalPages;
+        } else if (i === 1) {
+            return i;
+        } else if (paginateRange < totalPages) {
+            if (totalPages - halfWay < currentPage) {
+                return totalPages - paginateRange + i;
+            } else if (halfWay < currentPage) {
+                return currentPage - halfWay + i;
+            } else {
+                return i;
+            }
+        } else {
+            return i;
+        }
+    }
     return {
         priority: 0,
         restrict: 'A',
         scope: {
             items: '&'
         },
-        template: '<nav>'
+        template:
+        '<nav>'
         + '<ul class="pagination">'
-        + '<li><a href="#" ng-disabled="isFirstPage()" ng-click="previousPage()"><i class="fa fa-chevron-left"></i></a></li>'
-        + '<li ng-repeat="page in pages()" ><a href="#" title="{{page+1}}" ng-click="goPage(page)">{{page+1}}</a></li>'
-        + '<li><a href="#" ng-disabled="isLastPage()" ng-click="nextPage()"><i class="fa fa-chevron-right"></i></a></li>'
+        + '<li ng-class="{ disabled : isFirstPage() }"><a href="" ng-click="goPage(0)"><i class="fa fa-angle-double-left"></i></a></li>'
+        + '<li ng-class="{ disabled : isFirstPage() }" ><a href="" title="Précédent" ng-disabled="isFirstPage()" ng-click="previousPage()"><i class="fa fa-angle-left"></i></a></li>'
+        + '<li ng-repeat="page in pages()  track by $index" ng-class="{ active : paginate.currentPage == page, disabled : page == \'...\'}" ><a href="" title="{{page}}" ng-click="goPage(page)">{{page}}</a></li>'
+        + '<li ng-class="{ disabled : isLastPage() }" ><a href="" title="Suivant" ng-disabled="isLastPage()" ng-click="nextPage()"><i class="fa fa-angle-right"></i></a></li>'
+        + '<li ng-class="{ disabled : isLastPage() }"><a href="" ng-click="goPage(paginate.lastPage)"><i class="fa fa-angle-double-right"></i></a></li>'
         + '</ul>'
+        + '<select ng-model="paginate.pageSize" ng-options="size for size in pageSizeList"></select>'
         + '</nav>',
         replace: false,
         compile: function compile(tElement, tAttrs, transclude) {
@@ -38,17 +61,20 @@ Remaining_Capital.directive('ngPaginate', function() {
                     scope.pageSizeList = [5, 10, 20, 50, 100];
                     scope.paginate = {
                         pageSize: 5,
-                        currentPage: 0
+                        currentPage: 0,
+                        lastPage:0
                     };
 
                     scope.isFirstPage = function() {
                         return scope.paginate.currentPage == 0;
                     };
-                    scope.isCurrentPage=function(){
-                        return scope.paginate.currentPage == 0;
+                    scope.isCurrentPage = function(page) {
+                        return scope.paginate.currentPage == page;
                     }
                     scope.isLastPage = function() {
-                        return scope.paginate.currentPage >= scope.items().length / scope.paginate.pageSize - 1;
+                        if (scope.paginate.currentPage != '...') {
+                            return scope.paginate.currentPage >= scope.paginate.lastPage;
+                        }
                     };
                     scope.previousPage = function() {
                         if (!scope.isFirstPage()) {
@@ -56,7 +82,9 @@ Remaining_Capital.directive('ngPaginate', function() {
                         }
                     };
                     scope.goPage = function(page) {
-                        scope.paginate.currentPage = page;
+                        if (page != '...') {
+                            scope.paginate.currentPage = page;
+                        }
                     }
                     scope.nextPage = function() {
                         if (!scope.isLastPage()) {
@@ -68,9 +96,33 @@ Remaining_Capital.directive('ngPaginate', function() {
                     };
                     scope.pages = function() {
                         var pages = [];
-                        for (var i = 0; i < Math.ceil(scope.items().length / scope.paginate.pageSize); i++) {
-                            pages.push(i);
-                        };
+                        var paginateRange = 10;
+                        var totalPages = Math.ceil(scope.items().length / scope.paginate.pageSize)-1;
+                        var halfWay = Math.ceil(paginateRange / 2);
+                        var position;
+                        scope.paginate.lastPage=totalPages;
+
+                        if (scope.paginate.currentPage <= halfWay) {
+                            position = 'start';
+                        } else if (totalPages - halfWay < scope.paginate.currentPage) {
+                            position = 'end';
+                        } else {
+                            position = 'middle';
+                        }
+                        var ellipsesNeeded = paginateRange < totalPages;
+                        var i = 0;
+                        while (i <= totalPages && i <= paginateRange) {
+                            var pageNumber = calculatePageNumber(i, scope.paginate.currentPage, paginateRange, totalPages);
+
+                            var openingEllipsesNeeded = (i === 2 && (position === 'middle' || position === 'end'));
+                            var closingEllipsesNeeded = (i === paginateRange - 1 && (position === 'middle' || position === 'start'));
+                            if (ellipsesNeeded && (openingEllipsesNeeded || closingEllipsesNeeded)) {
+                                pages.push('...');
+                            } else {
+                                pages.push(pageNumber);
+                            }
+                            i++;
+                        }
                         return pages;
                     };
                     scope.$watch('paginate.pageSize', function(newValue, oldValue) {
