@@ -21,46 +21,55 @@
     <body ng-controller="PageCtrl">
         <div class="container">
             <div class="row">
-                <h1 class="text-center">Calcul de mes mensualités</h1>
-                <form class="form-horizontal" role="form">
+                <h1 class="text-center project-title"><i class="fa fa-calculator"></i> Calcul de mes mensualités</h1>
+                <form class="form-horizontal col-lg-4 col-lg-offset-4" role="form">
                     <div class="form-group">
-                        <label class="col-sm-2 control-label">Capital restant dû:</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control"  ng-model="outstandingCapital" placeholder="Capital restant dû">
+                        <div class="col-lg-12">
+                            <input type="text" id="outstanding-capital" class="form-control" ng-model="outstandingCapital" required>
+                            <label for="outstanding-capital" alt="Capital restant dû" placeholder="Capital restant dû"></label>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-2 control-label">Taux annuel:</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" ng-model="annualRate" placeholder="Taux annuel">
+                        <div class="col-lg-12">
+                            <input type="text" id="annual-rate" class="form-control" ng-model="annualRate" required>
+                            <label for="annual-rate" alt="Taux annuel" placeholder="Taux annuel"></label>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-2 control-label">Nombre d'échéances:</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" ng-model="totalPayments" placeholder="Nombre d'échéances">
+                        <div class="col-lg-12">
+                            <input type="text" id="total-payments" class="form-control" ng-model="totalPayments" required>
+                            <label for="total-payments" alt="Nombre d'échéances" placeholder="Nombre d'échéances" ></label>
                         </div>
                     </div>
                 </form>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Numéro échéance</th>
-                            <th>Capital restant dû</th>
-                            <th>Mensualité</th>
-                            <th>Gain réel</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="data in datas">
-                            <td data-th="Numéro échéance" >{{data.maturity_number}}</td>
-                            <td data-th="Capital restant dû" >{{data.outstanding_capital|number:2}}</td>
-                            <td data-th="Mensualité" >{{data.monthly|number:2}}</td>
-                            <td data-th="Gain réel" >{{data.real_gain|number:2}}</td>
-                        </tr>
-                    </tbody>
-                </table>
+
+                <section class="col-lg-8 col-lg-offset-2">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Numéro échéance</th>
+                                <th>Capital restant dû</th>
+                                <th>Mensualité</th>
+                                <th>Gain réel</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="data in pageItems()">
+                                <td data-th="Numéro échéance" >{{data.maturity_number}}</td>
+                                <td data-th="Capital restant dû" >{{data.outstanding_capital|number:2}} €</td>
+                                <td data-th="Mensualité" >{{data.monthly|number:2}} €</td>
+                                <td data-th="Gain réel" >{{data.real_gain|number:2}} €</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div ng-paginate items="datas"></div>
+                </section>
             </div>
+        </div>
+        <div class="scroll-top" id="scroll-top" ng-class="scrollTopColor" scroll-on-click>
+            <a id="scroll-link" class="scroll-link" title="Revenir en haut de page">
+                <i class="fa fa-arrow-up scroll-icon"></i>
+            </a>
         </div>
         <!-- JavaScript -->
         <!-- build:js js/vendors.js -->

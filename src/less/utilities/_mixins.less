@@ -1,0 +1,128 @@
+.adaptive_placeholder(@width,@height, @radius,@font-size:1.5em,@color:#FFF,@background:#FFF, @margin: 1em, @border: 1px) {
+  @borders: (@border * 2);
+@margin-top: (@border * 10);
+  box-sizing: border-box;
+  width:@width;
+  height: ~"calc(@{height} + @{borders})";
+  margin: 0 0 @margin;
+  padding: @margin;
+  border: @border solid @color;
+  border-radius: @radius;
+  color:@color;
+  background: @background;
+  resize: none;
+  outline: none;
+    &:focus {
+      border-color: #00bafa;
+      + label {
+        &[placeholder] {
+          &:before {
+            color: #00bafa;
+          }
+        }
+      }
+    }
+    &:focus,
+    &:valid {
+      + label {
+        &[placeholder] {
+          &:before {
+            transition-duration: .2s;
+            transform: translate(0, (@margin * -1.5)) scale(.9, .9);
+          }
+        }
+      }
+    }
+    &:invalid {
+      + label {
+        &[placeholder] {
+          &[alt] {
+            &:before {
+              content: attr(alt);
+            }
+          }
+        }
+      }
+    }
+    + label {
+      &[placeholder] {
+        display: block;
+        pointer-events: none;
+        line-height: @margin;
+        margin-top: ~"calc(-@{height} - @{margin-top})";
+        margin-bottom: ~"calc((@{height} - @{margin}) + @{borders})";
+        &:before {
+          content: attr(placeholder);
+          display: inline-block;
+          margin: 0 ~"calc(@{margin} + @{borders})";
+          padding: 0 2px;
+          color: @color;
+          font-size:@font-size;
+          white-space: nowrap;
+          transition: .3s ease-in-out;
+          background-image: linear-gradient(to bottom, @background, @background);
+          background-size: 100% 5px;
+          background-repeat: no-repeat;
+          background-position: center;
+        }
+      }
+    }
+
+
+  &[disabled] {
+    &:focus {
+      border-color: @color;
+      + label {
+        &[placeholder] {
+          &:before {
+            color: @color;
+          }
+        }
+      }
+    }
+    &:focus,
+    &:valid {
+      + label {
+        &[placeholder] {
+          &:before {
+            transition-duration: .2s;
+            transform: translate(0, (@margin * -1.5)) scale(.9, .9);
+          }
+        }
+      }
+    }
+    &:invalid {
+      + label {
+        &[placeholder] {
+          &[alt] {
+            &:before {
+              content: attr(alt);
+            }
+          }
+        }
+      }
+    }
+    + label {
+      &[placeholder] {
+        display: block;
+        pointer-events: none;
+        line-height: @margin;
+        margin-top: ~"calc(-@{height} - @{borders})";
+        margin-bottom: ~"calc((@{height} - @{margin}) + @{borders})";
+        &:before {
+          content: attr(placeholder);
+          display: inline-block;
+          margin: 0 ~"calc(@{margin} + @{borders})";
+          padding: 0 2px;
+          color: @color;
+          white-space: nowrap;
+          transition: .3s ease-in-out;
+          background-image: linear-gradient(to bottom, @background, @background);
+          background-size: 100% 5px;
+          background-repeat: no-repeat;
+          background-position: center;
+        }
+      }
+    }
+  }
+}
